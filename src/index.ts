@@ -1,6 +1,5 @@
 import * as $ from "jquery";
 import PdfScraper from "./PdfScraping/PdfScraper";
-import CsvConverter from "./Statements/Converting/CsvConverter";
 import StatementParser from "./Statements/Parsing/StatementParser";
 
 const retryButtonSelector = "#retry-button";
@@ -27,12 +26,9 @@ function convertPdf() {
     pdfScraper.scrapeText(window.URL.createObjectURL(pdfFile), password).then(result => {
         if (result.successful) {
             let statementParser = new StatementParser(),
-                statementItems = statementParser.parse(result.text),
-                csvConverter = new CsvConverter(),
-                csvContent = csvConverter.convert(statementItems).join("\r\n"),
-                encodedCsvContent = encodeURIComponent(csvContent);
+                statementItems = statementParser.parse(result.text);
 
-            downloadCsv(pdfFile.name, encodedCsvContent);
+            // TODO: upload statement items into Google Sheets
 
             clearAndHidePasswordInput();
         }
@@ -43,22 +39,6 @@ function convertPdf() {
             showIncorrectPasswordError();
         }
     });
-}
-
-function downloadCsv(pdfFileName: string, encodedCsvContent: string) {
-    let downloadLink = document.createElement("a"),
-        csvUri = "data:text/csv;charset=utf-8," + encodedCsvContent,
-        filename = `${pdfFileName.substring(0, pdfFileName.lastIndexOf(".pdf"))}.csv`;
-
-    // A link is created instead of redirecting to the URI so that a filename can be set.
-    // Setting the href to the URI and download to the filename comes from FileSaver.js (via StackOverflow).
-    downloadLink.href = csvUri;
-    downloadLink.style.cssText = "visibility: hidden";
-    downloadLink.download = filename;
-
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
 }
 
 function clearAndHidePasswordInput() {
