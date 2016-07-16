@@ -1,7 +1,10 @@
 import * as $ from "jquery";
+import Authoriser from "./GoogleSheets/Authoriser";
 import PdfScraper from "./PdfScraping/PdfScraper";
 import StatementParser from "./Statements/Parsing/StatementParser";
 
+const authorisationFailureSelector = "#authorisation-failure";
+const statementPickerSelector = "#statement-picker";
 const retryButtonSelector = "#retry-button";
 const filePickerSelector = "#statement-file-picker";
 const filePickerLabelSelector = "#file-picker-label";
@@ -11,6 +14,21 @@ const passwordInputSelector = "#password-input";
 
 $(filePickerSelector).on("change", convertPdf);
 $(retryButtonSelector).click(convertPdf);
+
+function onGapiLoad() {
+    let gapiAuthoriser = new Authoriser(handleAuthorisation);
+    gapiAuthoriser.authorise();
+}
+
+// Make onGapiLoad available on window so it can be called once the gapi script has loaded
+// e.g. src="https://apis.google.com/js/client.js?onload=onGapiLoad"
+(<any>window).onGapiLoad = onGapiLoad;
+
+function handleAuthorisation() {
+    $(authorisationFailureSelector).show();
+}
+
+
 
 function convertPdf() {
     let filePicker = <HTMLInputElement>$(filePickerSelector).get(0),

@@ -10,6 +10,7 @@ module.exports = {
     filename: "bundle.js"
   },
   externals: {
+    gapi: "gapi",
     jquery: "jQuery"
   },
   module: {

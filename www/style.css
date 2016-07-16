@@ -13,8 +13,19 @@ h1 {
 }
 .content {
 	margin:0 auto;
-	max-width:43rem;
+	max-width:44rem;
 	width:100%;
+}
+.authorisation-failure,
+.statement-picker {
+	display: none;
+}
+.authorisation-failure-message {
+	background-color:#EF9A9A;
+	display:block;
+	font-size: 16px;
+	margin-top:1.34em;
+	padding:1em;
 }
 .file-picker-input {
 	display:none;
