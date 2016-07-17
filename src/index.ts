@@ -1,7 +1,8 @@
 import * as $ from "jquery";
-import AuthorisationResult from "./GoogleSheets/AuthorisationResult";
-import Authoriser from "./GoogleSheets/Authoriser";
+import AuthorisationResult from "./Google/AuthorisationResult";
+import Authoriser from "./Google/Authoriser";
 import PdfScraper from "./PdfScraping/PdfScraper";
+import SheetsLoader from "./Google/SheetsLoader";
 import StatementParser from "./Statements/Parsing/StatementParser";
 
 const authorisationFailureSelector = "#authorisation-failure";
@@ -27,6 +28,7 @@ function onGapiLoad() {
 
 function handleAuthorisation(result: AuthorisationResult) {
     if (result.authorised) {
+        loadGoogleSheets();
         $(statementPickerSelector).show();
     }
     else {
@@ -34,6 +36,17 @@ function handleAuthorisation(result: AuthorisationResult) {
         $(authorisationFailureSelector).show();
     }
 }
+
+function loadGoogleSheets() {
+    let sheetsLoader = new SheetsLoader();
+    sheetsLoader.load()
+        .then((sheets) => {
+            sheets.forEach((sheet) => {
+                console.log('Found sheet: ', sheet.name, sheet.id);
+            });
+        });
+}
+
 
 
 
