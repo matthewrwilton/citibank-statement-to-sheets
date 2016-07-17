@@ -1,5 +1,7 @@
+import AuthorisationResult from "./AuthorisationResult";
+
 export default class Authoriser {
-    constructor(private handleAuthorisation: () => void) {
+    constructor(private handleAuthorisation: (result: AuthorisationResult) => void) {
     } 
 
     public authorise() {
@@ -13,6 +15,7 @@ export default class Authoriser {
     }
 
     private authoriseCallback(result: GoogleApiOAuth2TokenObject) {
-        this.handleAuthorisation();
+        let authorised = result.access_token !== undefined;
+        this.handleAuthorisation(new AuthorisationResult(authorised, result.error));
     }
 }

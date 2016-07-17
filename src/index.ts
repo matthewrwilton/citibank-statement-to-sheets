@@ -1,4 +1,5 @@
 import * as $ from "jquery";
+import AuthorisationResult from "./GoogleSheets/AuthorisationResult";
 import Authoriser from "./GoogleSheets/Authoriser";
 import PdfScraper from "./PdfScraping/PdfScraper";
 import StatementParser from "./Statements/Parsing/StatementParser";
@@ -24,8 +25,14 @@ function onGapiLoad() {
 // e.g. src="https://apis.google.com/js/client.js?onload=onGapiLoad"
 (<any>window).onGapiLoad = onGapiLoad;
 
-function handleAuthorisation() {
-    $(authorisationFailureSelector).show();
+function handleAuthorisation(result: AuthorisationResult) {
+    if (result.authorised) {
+        $(statementPickerSelector).show();
+    }
+    else {
+        console.log(`gapi authorisation error: ${result.errorMessage}`);
+        $(authorisationFailureSelector).show();
+    }
 }
 
 
