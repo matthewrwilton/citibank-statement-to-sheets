@@ -6,7 +6,7 @@
         "sourceMap": false
     },
     "files": [
-        "typings/gapi.sheets.d.ts",
+        "typings/gapi.client.d.ts",
         "typings/index.d.ts",
         "typings/pdfjs-dist.d.ts"
     ]
