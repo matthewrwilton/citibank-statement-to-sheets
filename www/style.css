@@ -17,7 +17,11 @@ h1 {
 	width:100%;
 }
 .authorisation-failure,
-.statement-picker {
+.statement-picker,
+.sheet-select,
+.sheets-failure,
+.file-picker-input,
+.password-section {
 	display: none;
 }
 .authorisation-failure-message {
@@ -27,18 +31,12 @@ h1 {
 	margin-top:1.34em;
 	padding:1em;
 }
-.file-picker-input {
-	display:none;
-}
 .file-picker-label {
 	background-color:#4FC3F7;
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
 	display:inline-block;
 	cursor:pointer;
 	padding:2rem;
-}
-.password-section {
-	display: none;
 }
 .password-input-label {
 	background-color:#EF9A9A;

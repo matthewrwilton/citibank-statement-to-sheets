@@ -2,7 +2,9 @@ import * as $ from "jquery";
 import AuthorisationResult from "./Google/AuthorisationResult";
 import Authoriser from "./Google/Authoriser";
 import PdfScraper from "./PdfScraping/PdfScraper";
+import Sheet from "./Google/Sheet";
 import SheetsLoader from "./Google/SheetsLoader";
+import SheetsLoadResult from "./Google/SheetsLoadResult";
 import StatementParser from "./Statements/Parsing/StatementParser";
 
 const authorisationFailureSelector = "#authorisation-failure";
@@ -13,9 +15,14 @@ const filePickerLabelSelector = "#file-picker-label";
 const passwordSectionSelector = "#password-section";
 const passwordInputLabelSelector = "#password-input-label";
 const passwordInputSelector = "#password-input";
+const sheetSelectSelector = "#sheet-select";
+const sheetComboSelector = "#sheet-combo";
+const sheetsFailureSelector = "#sheets-failure";
 
 $(filePickerSelector).on("change", convertPdf);
 $(retryButtonSelector).click(convertPdf);
+
+let sheetsLoaded = false;
 
 function onGapiLoad() {
     let gapiAuthoriser = new Authoriser(handleAuthorisation);
@@ -40,13 +47,24 @@ function handleAuthorisation(result: AuthorisationResult) {
 function loadGoogleSheets() {
     let sheetsLoader = new SheetsLoader();
     sheetsLoader.load()
-        .then((sheets) => {
-            sheets.forEach((sheet) => {
-                console.log('Found sheet: ', sheet.name, sheet.id);
-            });
+        .then((result: SheetsLoadResult) => {
+            sheetsLoaded = result.successful;
+            if (result.successful) {
+                addSheetsToCombo(result.sheets);
+            }
+            else {
+                console.error(result.errorMessage);
+            }
         });
 }
 
+function addSheetsToCombo(sheets: Sheet[]) {
+    let sheetCombo = $(sheetComboSelector);
+    
+    sheets.forEach((sheet) => {
+        sheetCombo.append(new Option(sheet.name, sheet.id));
+    });
+}
 
 
 
@@ -66,9 +84,17 @@ function convertPdf() {
             let statementParser = new StatementParser(),
                 statementItems = statementParser.parse(result.text);
 
+            clearAndHidePasswordInput();
+
+            if (sheetsLoaded) {
+                showSheetsCombo();
+            }
+            else {
+                showSheetsFailure();
+            }
+
             // TODO: upload statement items into Google Sheets
 
-            clearAndHidePasswordInput();
         }
         else if (result.passwordRequired) {
             showPasswordRequiredError();
@@ -95,4 +121,12 @@ function showIncorrectPasswordError() {
     (<HTMLInputElement>$(passwordInputSelector).get(0)).value = "";
     $(filePickerLabelSelector).text("CHANGE STATEMENT");
     $(passwordSectionSelector).show();
+}
+
+function showSheetsCombo() {
+    $(sheetSelectSelector).show();
+}
+
+function showSheetsFailure() {
+    $(sheetsFailureSelector).show();
 }

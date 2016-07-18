@@ -24,8 +24,17 @@
 						<label class="retry-button" id="retry-button">RETRY</label>
 					</div>
 
+					<div class="sheet-select" id="sheet-select">
+						<label class="sheet-combo-label" id="sheet-combo-label" for="sheet-combo">SELECT GOOGLE SHEET</label>
+						<select class="sheet-combo" id="sheet-combo"></select>
+					</div>
+
+					<div class="sheets-failure" id="sheets-failure">
+						<span>Unable to load Google sheets and cannot proceed. Error details in console.</span>
+					</div>
+
 					<input class="file-picker-input" id="statement-file-picker" type="file" accept=".pdf">
-					<label class="file-picker-label" id="file-picker-label" for="statement-file-picker">SELECT STATEMENT</label>
+					<label class="file-picker-label" id="file-picker-label" for="statement-file-picker">SELECT STATEMENT</label> 
 				</div>
 
 				<div class="credits">
