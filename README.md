@@ -17,6 +17,10 @@ The application uses modern browser functionality and will not work in older out
 ## Development
 Clone the repository. Checkout the master branch.
 
-Running "npm run-script build" or "webpack" will build the application using webpack. To build on changes run "npm run-script watch".
+Build the application using webpack by running `npm run-script build` or `webpack`. To have the application continuously build on changes run `npm run-script watch`.
 
-Tests can be run with "npm test". For a continuous test runner use "npm run-script test-debug".
+Usage of the Google Drive and Sheets APIs require setting up an application in the [Google API Console](https://console.developers.google.com) to get an OAuth client ID. To register for OAuth an authorised JavaScript origin is needed, which requires hosting the application.
+
+There are many ways of hosting the application locally. I already had IIS Express and used the following command to host the application locally `iisexpress /path:{PATH_TO_REPO}\www /port:8080` e.g. `iisexpress /path:C:\citibank-statement-to-sheets\www /port:8080`
+
+Tests can be run with `npm test`. Use `npm run-script test-debug` to start a continuous test runner.
