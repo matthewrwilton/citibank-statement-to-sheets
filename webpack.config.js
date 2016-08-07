@@ -3,15 +3,14 @@ var path = require("path");
 
 module.exports = {
   context: __dirname,
-  entry: "./src/index.ts",
+  entry: "./src/ViewModel.ts",
   output: {
     path: path.join(__dirname, "./www"),
     publicPath: "./",
     filename: "bundle.js"
   },
   externals: {
-    gapi: "gapi",
-    jquery: "jQuery"
+    gapi: "gapi"
   },
   module: {
     loaders: [

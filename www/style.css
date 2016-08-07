@@ -6,70 +6,67 @@ html {
 }
 h1 {
 	color:#fff;
+	font-size:2.5rem;
 	font-weight:normal;
 }
-.top-page-margin {
-	margin-top:10%;
+button,
+.statement-picker {
+	background-color:#4FC3F7;
+	border:none;
+	box-shadow:0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+	cursor:pointer;
+	font-size:1.25rem;
+	margin-bottom:1.5rem;
+	padding:2rem;
 }
-.content {
+
+.centered-column {
 	margin:0 auto;
-	max-width:44rem;
+	max-width:54rem;
 	width:100%;
 }
-.authorisation-failure,
-.statement-picker,
-.sheet-select,
-.sheets-failure,
-.file-picker-input,
-.password-section {
-	display: none;
+.header {
+	margin:10rem 0 3rem 0;
 }
-.authorisation-failure-message {
+.content {
+	min-height:25rem;
+}
+.message {
+	background-color:#B3E5FC;
+	box-shadow:0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+	color:#000;
+	font-size:1.5rem;
+	margin-bottom:1.5rem;
+	padding:1.7rem;
+}
+.message.mod-error {
 	background-color:#EF9A9A;
-	display:block;
-	font-size: 16px;
-	margin-top:1.34em;
-	padding:1em;
 }
-.file-picker-label {
-	background-color:#4FC3F7;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+.statement-input {
+	display:none;
+}
+.statement-picker {
 	display:inline-block;
-	cursor:pointer;
-	padding:2rem;
 }
-.password-input-label {
-	background-color:#EF9A9A;
-	display:block;
-	font-size: 16px;
-	margin-top:1.34em;
-	padding:1em;
+.selected-statement {
+	font-size:1.25rem;
+	margin-left:2rem;
 }
+.sheet-picker,
 .password-input {
 	border:none;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+	box-shadow:0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
 	display:block;
 	font-family:"Roboto", sans-serif;
-	font-size:16px;
-	height:45px;
-	margin-top:1.34em;
-	padding:0 45px 0 15px;
-}
-.retry-button {
-	background-color:#4FC3F7;
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
-	display:inline-block;
-	cursor:pointer;
-	margin:1.34em 0;
-	padding:2rem;
+	font-size:1.25rem;
+	height:3rem;
+	margin-bottom:1.5rem;
+	padding:0 1.7rem 0 1.7rem;
 }
 .credits {
 	color:#fff;
-	font-size:14px;
-	margin-top:10em;
 	opacity:.7;
 }
 .credits a {
 	color:#fff;
-	font-size:14px;
 }
