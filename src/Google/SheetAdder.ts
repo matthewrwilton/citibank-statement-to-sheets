@@ -1,19 +1,12 @@
 import SheetAddResult from "./SheetAddResult";
+import SheetsApiLoader from "./SheetsApiLoader";
 
 export default class SheetAdder {
     public add(spreadsheetId: string): Promise<SheetAddResult> {
-        return this.loadSheetsApi()
+        return SheetsApiLoader.load()
             .then(() => {
                 return this.addSheet(spreadsheetId);
             }, (reason) => { return SheetAddResult.ApiLoadFailure(reason); });
-    }
-
-    private loadSheetsApi(): Promise<void> {
-        if (gapi.client.sheets !== undefined) {
-            return Promise.resolve(null);
-        }
-
-        return gapi.client.load("https://sheets.googleapis.com/$discovery/rest?version=v4");
     }
 
     private addSheet(spreadsheetId: string): Promise<SheetAddResult> {
