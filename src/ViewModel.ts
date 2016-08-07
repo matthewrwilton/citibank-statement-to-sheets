@@ -6,6 +6,8 @@ import SheetAdder from "./Google/SheetAdder";
 import Spreadsheet from "./Google/Spreadsheet";
 import SpreadsheetsLoader from "./Google/SpreadsheetsLoader";
 import SpreadsheetsLoadResult from "./Google/SpreadsheetsLoadResult";
+import SpreadsheetWriter from "./Google/SpreadsheetWriter";
+import StatementItem from "./Statements/StatementItem";
 import StatementParser from "./Statements/Parsing/StatementParser";
 
 export default class ViewModel {
@@ -35,8 +37,7 @@ export default class ViewModel {
 
     public statementSelected = ko.pureComputed(() => {
         return this.statement() !== null; 
-    }); 
-
+    });
 
     public authorise() {
         this.authorisationFailed(false);
@@ -47,18 +48,41 @@ export default class ViewModel {
     }
 
     public importStatement() {
-        this.scrapePdf()
+        let spreadsheetId = this.selectedSheet().id,
+            sheetAdder = new SheetAdder();
+
+        // Display an importing message.
+
+        sheetAdder.add(spreadsheetId)
+            .then((result) => {
+                if (result.successful) {
+                    return;
+                }
+                else {
+                    // Display an error message.
+                    console.error(`Could not add a new sheet for statement import. Error: ${result.errorMessage}`);
+                    return Promise.reject("Failed to add sheet.");
+                }
+            })
+            .then(() => { return this.scrapePdf(); })
             .then((statementText) => {
-                let sheetId = this.selectedSheet().id, 
-                    statementParser = new StatementParser(),
+                let statementParser = new StatementParser(),
                     statementItems = statementParser.parse(statementText),
-                    sheetAdder = new SheetAdder();
+                    sheetData = this.statementItemsToArray(statementItems),
+                    sheetWriter = new SpreadsheetWriter();
 
-                // TODO: upload statement items into Google Sheets
-                sheetAdder.add(sheetId);
-
-                this.statementImported(true);
-                this.statement(null);
+                return sheetWriter.write(spreadsheetId, sheetData);
+            })
+            .then(result => {
+                if (result.successful) {
+                    this.statementImported(true);
+                    this.statement(null);
+                }
+                else {
+                    // Display an error message.
+                    console.error(`Could not write statement data to sheet. Error: ${result.errorMessage}`);
+                    return Promise.reject("Failed to write data to sheet.");
+                }
             }, (reason) => { /* Errors already handled. Do not continue with import. */ });
     }
 
@@ -101,7 +125,7 @@ export default class ViewModel {
                     this.sheetsLoaded(true);
                 }
                 else {
-                    console.error(result.errorMessage);
+                    console.error(`Could not load Sheets via Drive API. Error: ${result.errorMessage}`);
                     this.loadingSheetsFailed(true);
                 }
                 this.loadingSheets(false);
@@ -129,6 +153,24 @@ export default class ViewModel {
                     return Promise.reject<string[]>("Password incorrect.");
                 }
             });
+    }
+
+    private statementItemsToArray(items: StatementItem[]): any[][] {
+        return [[
+            "CARD NUMBER",
+            "DATE",
+            "DESCRIPTION",
+            "REFERENCE #",
+            "AMOUNT"
+        ]].concat(items.map(item => {
+            return [
+                item.cardNumber,
+                item.date,
+                item.transactionDetails,
+                item.referenceNumber,
+                item.amount
+            ];
+        }))
     }
 }
 
