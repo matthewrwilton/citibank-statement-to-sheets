@@ -2,9 +2,10 @@ import * as ko from "knockout";
 import AuthorisationResult from "./Google/AuthorisationResult";
 import Authoriser from "./Google/Authoriser";
 import PdfScraper from "./PdfScraping/PdfScraper";
-import Sheet from "./Google/Sheet";
-import SheetsLoader from "./Google/SheetsLoader";
-import SheetsLoadResult from "./Google/SheetsLoadResult";
+import SheetAdder from "./Google/SheetAdder";
+import Spreadsheet from "./Google/Spreadsheet";
+import SpreadsheetsLoader from "./Google/SpreadsheetsLoader";
+import SpreadsheetsLoadResult from "./Google/SpreadsheetsLoadResult";
 import StatementParser from "./Statements/Parsing/StatementParser";
 
 export default class ViewModel {
@@ -14,8 +15,8 @@ export default class ViewModel {
     public loadingSheetsFailed = ko.observable(false);
     public passwordIncorrect = ko.observable(false);
     public passwordRequired = ko.observable(false);
-    public selectedSheet: ko.Observable<Sheet> = ko.observable(null);
-    public sheets: ko.ObservableArray<Sheet> = ko.observableArray([]);
+    public selectedSheet: ko.Observable<Spreadsheet> = ko.observable(null);
+    public sheets: ko.ObservableArray<Spreadsheet> = ko.observableArray([]);
     public sheetsLoaded = ko.observable(false);
     public statement: ko.Observable<File> = ko.observable(null);
     public statementImported = ko.observable(false);
@@ -48,10 +49,13 @@ export default class ViewModel {
     public importStatement() {
         this.scrapePdf()
             .then((statementText) => {
-                let statementParser = new StatementParser(),
-                    statementItems = statementParser.parse(statementText);
+                let sheetId = this.selectedSheet().id, 
+                    statementParser = new StatementParser(),
+                    statementItems = statementParser.parse(statementText),
+                    sheetAdder = new SheetAdder();
 
                 // TODO: upload statement items into Google Sheets
+                sheetAdder.add(sheetId);
 
                 this.statementImported(true);
                 this.statement(null);
@@ -87,11 +91,11 @@ export default class ViewModel {
     }
 
     private loadGoogleSheets() {
-        let sheetsLoader = new SheetsLoader();
+        let sheetsLoader = new SpreadsheetsLoader();
         
         this.loadingSheets(true);
         sheetsLoader.load()
-            .then((result: SheetsLoadResult) => {
+            .then((result: SpreadsheetsLoadResult) => {
                 if (result.successful) {
                     ko.utils.arrayPushAll(this.sheets, result.sheets);
                     this.sheetsLoaded(true);

@@ -1,8 +1,10 @@
-// Typings for the Google Sheets API.
+// Typings for the Google Drive & Sheets APIs.
 
 declare namespace gapi.client {
     export var drive: GapiClientDrive;
     export var sheets: any;
+
+    export function load(discoveryUrl: string); // See Step 2 at https://developers.google.com/sheets/quickstart/js
 }
 
 declare interface GapiClientDrive {
