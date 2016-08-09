@@ -13,6 +13,7 @@ import StatementParser from "./Statements/Parsing/StatementParser";
 export default class ViewModel {
     public authorising = ko.observable(true);
     public authorisationFailed = ko.observable(false);
+    public importing = ko.observable(false);
     public loadingSheets = ko.observable(false);
     public loadingSheetsFailed = ko.observable(false);
     public passwordIncorrect = ko.observable(false);
@@ -47,11 +48,15 @@ export default class ViewModel {
         gapiAuthoriser.authorise();
     }
 
+    public importAnother() {
+        this.statementImported(false);
+    }
+
     public importStatement() {
         let spreadsheetId = this.selectedSheet().id,
             sheetAdder = new SheetAdder();
 
-        // Display an importing message.
+        this.importing(true);
 
         sheetAdder.add(spreadsheetId)
             .then((result) => {
@@ -83,13 +88,13 @@ export default class ViewModel {
                     console.error(`Could not write statement data to sheet. Error: ${result.errorMessage}`);
                     return Promise.reject("Failed to write data to sheet.");
                 }
-            }, (reason) => { /* Errors already handled. Do not continue with import. */ });
+            }, (reason) => { /* Errors already handled. Do not continue with import. */ })
+            .then(() => { this.importing(false); });
     }
 
     public onStatementChange(data: ViewModel, event: Event) {
         let statementInput = <HTMLInputElement>event.target;
 
-        this.statementImported(false);
         this.statementPassword("");
         
         if (statementInput.files.length == 0) {

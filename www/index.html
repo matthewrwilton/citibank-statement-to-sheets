@@ -27,7 +27,8 @@
 						</div>
 					</div>
 
-					<div data-bind="if: sheetsLoaded">
+					<div data-bind="if: sheetsLoaded() && !importing() && !statementImported()">
+
 						<input class="statement-input" id="statement-input" type="file" accept=".pdf" data-bind="event: { change: onStatementChange }">
 						<!-- ko ifnot: statementSelected -->
 							<label class="statement-picker" for="statement-input">SELECT STATEMENT</label>
@@ -37,15 +38,26 @@
 						<!-- /ko -->
 						<span class="selected-statement" data-bind="text: statementFileName"></span>
 
-						<select class="sheet-picker" data-bind="options: sheets, optionsText: 'name', value: selectedSheet, optionsCaption: 'SELECT GOOGLE SHEET'"></select>
-
-						<div class="message" data-bind="visible: statementImported">Statement imported.</div>
+						<div>
+							<select class="sheet-picker" data-bind="options: sheets, optionsText: 'name', value: selectedSheet, optionsCaption: 'SELECT GOOGLE SHEET'"></select>
+						</div>
 
 						<div class="message" data-bind="visible: passwordRequired">Statement password required.</div>
 						<div class="message mod-error" data-bind="visible: passwordIncorrect">Incorrect password.</div>
-						<input class="password-input" type="password" data-bind="textInput: statementPassword, visible: passwordRequired() || passwordIncorrect()">
+						<div>
+							<input class="password-input" type="password" data-bind="textInput: statementPassword, visible: passwordRequired() || passwordIncorrect()">
+						</div>
 
-						<button data-bind="click: importStatement,visible: canImport">IMPORT</button>
+						<button data-bind="click: importStatement, visible: canImport">IMPORT</button>
+					</div>
+
+					<div data-bind="if: importing">
+						<div class="message">Importing ...</div>
+					</div>
+
+					<div data-bind="if: statementImported">
+						<div class="message">Statement imported.</div>
+						<button data-bind="click: importAnother">IMPORT ANOTHER</button>
 					</div>
 				</div>
 			</div>
