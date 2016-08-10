@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Citibank Statement to Sheets</title>
+		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+		<link href="style.css" rel="stylesheet" title="Page Styles">
+	</head>
+	<body>
+		<div class="centered-column">
+			<h1 class="header">Import Citibank credit card statements to Sheets</h1>
+
+			<div class="content">
+				<div id="prevent-ui-flickers" data-bind="visible: true" style="display:none;">
+					<div class="message" data-bind="visible: authorising">Authorising with Google ...</div>
+
+					<div data-bind="if: authorisationFailed">
+						<div class="message mod-error">Google authorisation is required to import Citibank statements into Sheets.</div>
+						<button data-bind="click: authorise">AUTHORISE</button>
+					</div>
+					
+					<div class="message" data-bind="visible: loadingSheets">Retrieving a list of your Google Sheets ...</div>
+					
+					<div class="message mod-error" data-bind="visible: loadingSheetsFailed">
+						The application was unable to load your Google sheets and cannot proceed.<br /><br />
+						See the console for further error details.
+					</div>
+
+					<div data-bind="if: sheetsLoaded() && !importing() && !statementImported() && !errored()">
+						<input class="statement-input" id="statement-input" type="file" accept=".pdf" data-bind="event: { change: onStatementChange }">
+						<!-- ko ifnot: statementSelected -->
+							<label class="statement-picker" for="statement-input">SELECT STATEMENT</label>
+						<!-- /ko -->
+						<!-- ko if: statementSelected -->
+							<label class="statement-picker" for="statement-input">CHANGE STATEMENT</label>
+						<!-- /ko -->
+						<span class="selected-statement" data-bind="text: statementFileName"></span>
+
+						<div>
+							<select class="sheet-picker" data-bind="options: sheets, optionsText: 'name', value: selectedSheet, optionsCaption: 'SELECT GOOGLE SHEET'"></select>
+						</div>
+
+						<div class="message" data-bind="visible: passwordRequired">Statement password required.</div>
+						<div class="message mod-error" data-bind="visible: passwordIncorrect">Incorrect password.</div>
+						<div>
+							<input class="password-input" type="password" data-bind="textInput: statementPassword, visible: passwordRequired() || passwordIncorrect()">
+						</div>
+
+						<button data-bind="click: importStatement, visible: canImport">IMPORT</button>
+					</div>
+
+					<div class="message" data-bind="visible: importing">Importing ...</div>
+
+					<div data-bind="if: statementImported">
+						<div class="message">Statement imported.</div>
+						<button data-bind="click: importAnother">IMPORT ANOTHER</button>
+					</div>
+
+					<div data-bind="if: errored">
+						<div class="message mod-error">
+							<span data-bind="text: error"></span><br /><br />
+							See the console for further error details.
+						</div>
+						<button data-bind="click: retry">RETRY</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="credits">
+				<p>
+					<a href="https://github.com/matthewrwilton/citibank-statement-to-sheets">View source on GitHub</a>
+				</p>
+				<p>
+					Built with: 
+					<a href="https://www.typescriptlang.org/">TypeScript</a> - 
+					<a href="https://www.npmjs.com/">npm</a> - 
+					<a href="https://webpack.github.io/">webpack</a> - 
+					<a href="https://mozilla.github.io/pdf.js/">PDF.js</a> - 
+					<a href="https://karma-runner.github.io/0.13/index.html">karma</a> - 
+					<a href="http://jasmine.github.io/">Jasmine</a> - 
+					<a href="http://knockoutjs.com/">Knockout</a> - 
+					<a href="https://developers.google.com/">Google APIs</a>
+					<br/><br/>
+					and the following packages:
+					<a href="https://www.npmjs.com/package/entry-loader">entry-loader</a> - 
+					<a href="https://www.npmjs.com/package/karma-chrome-launcher">karma-chrome-launcher</a> - 
+					<a href="https://www.npmjs.com/package/karma-cli">karma-cli</a> - 
+					<a href="https://www.npmjs.com/package/karma-jasmine">karma-jasmine</a> - 
+					<a href="https://www.npmjs.com/package/karma-sourcemap-loader">karma-sourcemap-loader</a> - 
+					<a href="https://www.npmjs.com/package/karma-webpack">karma-webpack</a> - 
+					<a href="https://github.com/TypeStrong/ts-loader">ts-loader</a>
+					<br/><br/>
+					and TypeScript definition files via: 
+					<a href="https://github.com/typings/typings">Typings</a> and 
+					<a href="https://github.com/DefinitelyTyped/DefinitelyTyped">DefinitelyTyped</a>
+				</p>
+			</div>
+		</div>
+		<script src="bundle.js" type="text/javascript"></script>
+		<script src="https://apis.google.com/js/client.js?onload=onGapiLoad" type="text/javascript"></script>
+	</body>
+</html>
