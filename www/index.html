@@ -20,15 +20,12 @@
 					
 					<div class="message" data-bind="visible: loadingSheets">Retrieving a list of your Google Sheets ...</div>
 					
-					<div data-bind="if: loadingSheetsFailed">
-						<div class="message mod-error">
-							The application was unable to load your Google sheets and cannot proceed.<br /><br />
-							See the console for further error details.
-						</div>
+					<div class="message mod-error" data-bind="visible: loadingSheetsFailed">
+						The application was unable to load your Google sheets and cannot proceed.<br /><br />
+						See the console for further error details.
 					</div>
 
-					<div data-bind="if: sheetsLoaded() && !importing() && !statementImported()">
-
+					<div data-bind="if: sheetsLoaded() && !importing() && !statementImported() && !errored()">
 						<input class="statement-input" id="statement-input" type="file" accept=".pdf" data-bind="event: { change: onStatementChange }">
 						<!-- ko ifnot: statementSelected -->
 							<label class="statement-picker" for="statement-input">SELECT STATEMENT</label>
@@ -51,13 +48,19 @@
 						<button data-bind="click: importStatement, visible: canImport">IMPORT</button>
 					</div>
 
-					<div data-bind="if: importing">
-						<div class="message">Importing ...</div>
-					</div>
+					<div class="message" data-bind="visible: importing">Importing ...</div>
 
 					<div data-bind="if: statementImported">
 						<div class="message">Statement imported.</div>
 						<button data-bind="click: importAnother">IMPORT ANOTHER</button>
+					</div>
+
+					<div data-bind="if: errored">
+						<div class="message mod-error">
+							<span data-bind="text: error"></span><br /><br />
+							See the console for further error details.
+						</div>
+						<button data-bind="click: retry">RETRY</button>
 					</div>
 				</div>
 			</div>

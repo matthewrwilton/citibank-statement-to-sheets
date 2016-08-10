@@ -13,6 +13,7 @@ import StatementParser from "./Statements/Parsing/StatementParser";
 export default class ViewModel {
     public authorising = ko.observable(true);
     public authorisationFailed = ko.observable(false);
+    public error = ko.observable("");
     public importing = ko.observable(false);
     public loadingSheets = ko.observable(false);
     public loadingSheetsFailed = ko.observable(false);
@@ -29,6 +30,11 @@ export default class ViewModel {
         let selectedSheet = this.selectedSheet();
         return this.statementSelected() && selectedSheet !== null && selectedSheet !== undefined && 
             (!this.passwordRequired() || this.statementPassword() !== "");
+    });
+
+    public errored = ko.pureComputed(() => {
+        const error = this.error();
+        return error !== null && error !== ""; 
     });
 
     public statementFileName = ko.pureComputed(() => {
@@ -64,7 +70,7 @@ export default class ViewModel {
                     return;
                 }
                 else {
-                    // Display an error message.
+                    this.error("The application could not create a new sheet to import the statement into.");
                     console.error(`Could not add a new sheet for statement import. Error: ${result.errorMessage}`);
                     return Promise.reject("Failed to add sheet.");
                 }
@@ -84,12 +90,12 @@ export default class ViewModel {
                     this.statement(null);
                 }
                 else {
-                    // Display an error message.
+                    this.error("The application failed to import statement details into the sheet.");
                     console.error(`Could not write statement data to sheet. Error: ${result.errorMessage}`);
                     return Promise.reject("Failed to write data to sheet.");
                 }
-            }, (reason) => { /* Errors already handled. Do not continue with import. */ })
-            .then(() => { this.importing(false); });
+            })
+            .then(() => { this.importing(false); }, (reason) => { this.importing(false); });
     }
 
     public onStatementChange(data: ViewModel, event: Event) {
@@ -106,6 +112,10 @@ export default class ViewModel {
         
         this.scrapePdf()
             .catch(() => { /* Errors already handled */ });
+    }
+
+    public retry() {
+        this.error("");
     }
 
     private handleGapiAuthorisation(result: AuthorisationResult) {
