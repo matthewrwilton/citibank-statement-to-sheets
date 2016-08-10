@@ -63,8 +63,10 @@ button,
 	margin-bottom:1.5rem;
 	padding:0 1.7rem 0 1.7rem;
 }
-.credits {
+.credits,
+.privacy-policy {
 	color:#fff;
+	margin-bottom:1.5rem;
 	opacity:.7;
 }
 .credits a {
