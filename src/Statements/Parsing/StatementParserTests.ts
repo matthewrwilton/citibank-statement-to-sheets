@@ -236,6 +236,34 @@ describe("StatementParser", () => {
 
 			expect(actual).toEqual(expected);
 		});
+
+		it("parses a card change straight after an international transaction", () => {
+			let input = transactionsHeader
+				.concat([
+					"Card Number 0000 0000 0000 0000",
+					"May 01",
+					"ABCDEFG",
+					"135.21",
+					"11111111111111111111111",
+					"Foreign Amount U.S. Dollar 99.00",
+					"AUD 135.21 includes International Transaction fee AUD 4.45",
+					"Card Number 1111 1111 1111 1111",
+					"May 02",
+					"HIJKLMN",
+					"16.00",
+					"11111111111111111111112",
+				])
+				.concat(statementEnding);
+			let target = new StatementParser();
+
+			let expected = [
+				new StatementItem("0000 0000 0000 0000", "May 01", "ABCDEFG", "11111111111111111111111", "135.21", "Foreign Amount U.S. Dollar 99.00"),
+				new StatementItem("1111 1111 1111 1111", "May 02", "HIJKLMN", "11111111111111111111112", "16.00", ""),
+			];
+			let actual = target.parse(input);
+
+			expect(actual).toEqual(expected);
+		});
 	});
 });
 

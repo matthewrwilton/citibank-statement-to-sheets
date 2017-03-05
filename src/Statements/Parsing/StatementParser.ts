@@ -12,12 +12,12 @@ export default class StatementParser {
 			let index = startIndex;
 			
 			while (index < statementText.length) {
-				if (this.textIsCardNumber(statementText[index])) {
-					cardNumber = this.parseCardNumber(statementText[index]);
+				if (this.textIsInternationTransanctionFee(statementText[index])) {
 					index += 1;
 				}
 
-				if (this.textIsInternationTransanctionFee(statementText[index])) {
+				if (this.textIsCardNumber(statementText[index])) {
+					cardNumber = this.parseCardNumber(statementText[index]);
 					index += 1;
 				}
 
