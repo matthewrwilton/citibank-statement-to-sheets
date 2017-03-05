@@ -10,6 +10,9 @@ module.exports = function (config) {
     files: [
       "src/**/*Tests.ts"
     ],
+    mime: {
+      "text/x-typescript": ["ts"]
+    },
     preprocessors: {
       "src/**/*Tests.ts": ["webpack", "sourcemap"]
     },
