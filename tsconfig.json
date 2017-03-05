@@ -1,13 +1,13 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es6",
+        "target": "es2015",
         "noImplicitAny": false,
         "sourceMap": false
     },
     "files": [
+        "src/ViewModel.ts",
         "typings/gapi.client.d.ts",
-        "typings/index.d.ts",
         "typings/pdfjs-dist.d.ts"
     ]
 }

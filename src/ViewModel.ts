@@ -19,10 +19,10 @@ export default class ViewModel {
     public loadingSheetsFailed = ko.observable(false);
     public passwordIncorrect = ko.observable(false);
     public passwordRequired = ko.observable(false);
-    public selectedSheet: ko.Observable<Spreadsheet> = ko.observable(null);
-    public sheets: ko.ObservableArray<Spreadsheet> = ko.observableArray([]);
+    public selectedSheet: KnockoutObservable<Spreadsheet> = ko.observable(null);
+    public sheets: KnockoutObservableArray<Spreadsheet> = ko.observableArray([]);
     public sheetsLoaded = ko.observable(false);
-    public statement: ko.Observable<File> = ko.observable(null);
+    public statement: KnockoutObservable<File> = ko.observable(null);
     public statementImported = ko.observable(false);
     public statementPassword = ko.observable("");
 
@@ -136,7 +136,7 @@ export default class ViewModel {
         sheetsLoader.load()
             .then((result: SpreadsheetsLoadResult) => {
                 if (result.successful) {
-                    ko.utils.arrayPushAll(this.sheets, result.sheets);
+                    ko.utils.arrayPushAll<Spreadsheet>(this.sheets, result.sheets);
                     this.sheetsLoaded(true);
                 }
                 else {
