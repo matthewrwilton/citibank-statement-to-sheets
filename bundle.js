@@ -16658,7 +16658,8 @@
 	        return text.match(/Card Number (\d\d\d\d \d\d\d\d \d\d\d\d \d\d\d\d)/)[1];
 	    }
 	    textIsRowEnding(text) {
-	        return text === "(Continued next page)";
+	        return text === "(Continued next page)" ||
+	            /Page \d of \d, (January|February|March|April|May|June|July|August|September|October|November|December) \d\d\d\d/.test(text);
 	    }
 	    textIsTransactionsEnd(text) {
 	        return text === "Closing Balance";
