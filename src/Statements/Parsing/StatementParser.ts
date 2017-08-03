@@ -74,7 +74,8 @@ export default class StatementParser {
 	}
 
 	private textIsRowEnding(text: string): boolean {
-		return text === "(Continued next page)";
+		return text === "(Continued next page)" ||
+			/Page \d of \d, (January|February|March|April|May|June|July|August|September|October|November|December) \d\d\d\d/.test(text);
 	}
 
 	private textIsTransactionsEnd(text: string): boolean {

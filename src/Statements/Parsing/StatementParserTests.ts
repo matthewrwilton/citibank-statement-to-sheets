@@ -264,6 +264,38 @@ describe("StatementParser", () => {
 
 			expect(actual).toEqual(expected);
 		});
+
+		it ("parses a multi page statement, where there is a full page of transactions", () => {
+			// Statements can have a page of entirely transactions. 
+			// These pages don't end the transactions with the "(Continued next page)" text.
+			let input = transactionsHeader
+				.concat([
+					"Card Number 0000 0000 0000 0000",
+					"Aug 01",
+					"ABCDEFG",
+					"135.21",
+					"11111111111111111111111"
+				])
+				.concat(alternatePageEnding)
+				.concat(transactionsContinuedHeader)
+				.concat([
+					"Aug 02",
+					"HIJKLMN",
+					"16.00",
+					"11111111111111111111112"
+				])
+				.concat(statementEnding);
+
+			let target = new StatementParser();
+
+			let expected = [
+				new StatementItem("0000 0000 0000 0000", "Aug 01", "ABCDEFG", "11111111111111111111111", "135.21", ""),
+				new StatementItem("0000 0000 0000 0000", "Aug 02", "HIJKLMN", "11111111111111111111112", "16.00", ""),
+			];
+			let actual = target.parse(input);
+
+			expect(actual).toEqual(expected);
+		});
 	});
 });
 
@@ -283,6 +315,9 @@ let transactionsContinuedHeader = [
 ];
 let pageEnding = [
 	"(Continued next page)"
+];
+let alternatePageEnding = [
+	"Page 3 of 4, October 2018"
 ];
 let statementEnding = [
 	"Closing Balance"
