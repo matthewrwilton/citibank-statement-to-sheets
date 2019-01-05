@@ -16662,7 +16662,7 @@
 	            /Page \d of \d, (January|February|March|April|May|June|July|August|September|October|November|December) \d\d\d\d/.test(text);
 	    }
 	    textIsTransactionsEnd(text) {
-	        return text === "Closing Balance";
+	        return text === "Closing Balance" || text === "Total Citi Card Transactions ";
 	    }
 	    textIsForeignCurrencyAmount(text) {
 	        return text.startsWith("Foreign Amount ");
