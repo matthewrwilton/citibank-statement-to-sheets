@@ -296,6 +296,26 @@ describe("StatementParser", () => {
 
 			expect(actual).toEqual(expected);
 		});
+
+		it("parses statement with new ending footer", () => {
+			let input = transactionsHeader
+				.concat([
+					"Card Number 0000 0000 0000 0000",
+					"May 01",
+					"ABCDEFG",
+					"12.34",
+					"11111111111111111111111"
+				])
+				.concat(newStatementEnding);
+			let target = new StatementParser();
+
+			let expected = [
+				new StatementItem("0000 0000 0000 0000", "May 01", "ABCDEFG", "11111111111111111111111", "12.34", "")
+			];
+			let actual = target.parse(input);
+
+			expect(actual).toEqual(expected);
+		});
 	});
 });
 
@@ -321,4 +341,7 @@ let alternatePageEnding = [
 ];
 let statementEnding = [
 	"Closing Balance"
+];
+let newStatementEnding = [
+	"Total Citi Card Transactions "
 ];

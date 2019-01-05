@@ -79,7 +79,7 @@ export default class StatementParser {
 	}
 
 	private textIsTransactionsEnd(text: string): boolean {
-		return text === "Closing Balance";
+		return text === "Closing Balance" || text === "Total Citi Card Transactions ";
 	}
 
 	private textIsForeignCurrencyAmount(text: string): boolean {
