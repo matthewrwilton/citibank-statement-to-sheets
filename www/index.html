@@ -2,7 +2,6 @@
 <html lang="en">
 	<head>
 		<title>Citibank Statement to Sheets</title>
-		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 		<link href="style.css" rel="stylesheet" title="Page Styles">
 	</head>
 	<body>
@@ -11,21 +10,7 @@
 
 			<div class="content">
 				<div id="prevent-ui-flickers" data-bind="visible: true" style="display:none;">
-					<div class="message" data-bind="visible: authorising">Authorising with Google ...</div>
-
-					<div data-bind="if: authorisationFailed">
-						<div class="message mod-error">Google authorisation is required to import Citibank statements into Sheets.</div>
-						<button data-bind="click: authorise">AUTHORISE</button>
-					</div>
-					
-					<div class="message" data-bind="visible: loadingSheets">Retrieving a list of your Google Sheets ...</div>
-					
-					<div class="message mod-error" data-bind="visible: loadingSheetsFailed">
-						The application was unable to load your Google sheets and cannot proceed.<br /><br />
-						See the console for further error details.
-					</div>
-
-					<div data-bind="if: sheetsLoaded() && !importing() && !statementImported() && !errored()">
+					<div data-bind="if: !importing() && !statementImported() && !errored()">
 						<input class="statement-input" id="statement-input" type="file" accept=".pdf" data-bind="event: { change: onStatementChange }">
 						<!-- ko ifnot: statementSelected -->
 							<label class="statement-picker" for="statement-input">SELECT STATEMENT</label>
@@ -34,10 +19,6 @@
 							<label class="statement-picker" for="statement-input">CHANGE STATEMENT</label>
 						<!-- /ko -->
 						<span class="selected-statement" data-bind="text: statementFileName"></span>
-
-						<div>
-							<select class="sheet-picker" data-bind="options: sheets, optionsText: 'name', value: selectedSheet, optionsCaption: 'SELECT GOOGLE SHEET'"></select>
-						</div>
 
 						<div class="message" data-bind="visible: passwordRequired">Statement password required.</div>
 						<div class="message mod-error" data-bind="visible: passwordIncorrect">Incorrect password.</div>
@@ -102,6 +83,5 @@
 			</div>
 		</div>
 		<script src="bundle.js" type="text/javascript"></script>
-		<script src="https://apis.google.com/js/client.js?onload=onGapiLoad" type="text/javascript"></script>
 	</body>
 </html>

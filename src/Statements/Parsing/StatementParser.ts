@@ -12,6 +12,7 @@ export default class StatementParser {
 			let index = startIndex;
 			
 			while (index < statementText.length) {
+				console.log(index);
 				if (this.textIsInternationTransanctionFee(statementText[index])) {
 					index += 1;
 				}
