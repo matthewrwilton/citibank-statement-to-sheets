@@ -306,7 +306,48 @@ describe("StatementParser", () => {
 					"12.34",
 					"11111111111111111111111"
 				])
-				.concat(newStatementEnding);
+				.concat("Total Citi Card Transactions ");
+			let target = new StatementParser();
+
+			let expected = [
+				new StatementItem("0000 0000 0000 0000", "May 01", "ABCDEFG", "11111111111111111111111", "12.34", "")
+			];
+			let actual = target.parse(input);
+
+			expect(actual).toEqual(expected);
+		});
+
+		it("parses statement with multiple pages of content after transactions", () => {
+			let input = transactionsHeader
+				.concat([
+					"Card Number 0000 0000 0000 0000",
+					"May 01",
+					"ABCDEFG",
+					"12.34",
+					"11111111111111111111111"
+				])
+				.concat([
+					"Page 5 of 10",
+					"A-1  B-1  C-1",
+					"ABCD/EFGH.IJK.LM.NOPQRS.TUVWXYZ1",
+					" ",
+					"Page 6 of 10",
+					"A-1  B-2  I-2",
+					"311",
+					"Page 7 of 10",
+					"A-1  B-3  I-3",
+					"ABCD/EFGH.IJK.LM.NOPQRS.TUVWXYZ2",
+					"311",
+					"Page 8 of 10",
+					"A-1  B-4  I-4",
+					"311",
+					"Page 9 of 10",
+					"A-1  B-5  I-5",
+					"ABCD/EFGH.IJK.LM.NOPQRS.TUVWXYZ3",
+					"311",
+					"Page 10 of 10",
+					"A-1  B-6  I-6"
+				]);
 			let target = new StatementParser();
 
 			let expected = [
@@ -341,7 +382,4 @@ let alternatePageEnding = [
 ];
 let statementEnding = [
 	"Closing Balance"
-];
-let newStatementEnding = [
-	"Total Citi Card Transactions "
 ];
