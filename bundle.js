@@ -16681,7 +16681,7 @@
 	    textMatchesTransactionRow(date, amount, referenceNumber) {
 	        return /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d\d/.test(date) &&
 	            /\d+.\d+/.test(amount) &&
-	            /\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d/.test(referenceNumber);
+	            (/\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d/.test(referenceNumber) || /\D\D\D\D\d\d\d\d\d\d\d\d\d\d\d\d\d\d/.test(referenceNumber));
 	    }
 	}
 	exports.default = StatementParser;
