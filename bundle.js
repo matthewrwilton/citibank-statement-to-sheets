@@ -16626,7 +16626,15 @@
 	                    this.textIsTransactionsEnd(statementText[index])) {
 	                    break;
 	                }
+	                if (index + 4 >= statementText.length) {
+	                    // Parser has reached the end of the statement text
+	                    break;
+	                }
 	                let date = statementText[index], transactionDetails = statementText[index + 1], amount = statementText[index + 2], referenceNumber = statementText[index + 3], foreignCurrencyAmount = "";
+	                if (!this.textMatchesTransactionRow(date, amount, referenceNumber)) {
+	                    index += 1;
+	                    continue;
+	                }
 	                index += 4;
 	                if (this.textIsForeignCurrencyAmount(statementText[index])) {
 	                    foreignCurrencyAmount = statementText[index];
@@ -16669,6 +16677,11 @@
 	    }
 	    textIsInternationTransanctionFee(text) {
 	        return /AUD (\d)*.\d\d includes International Transaction fee AUD (\d)*.\d\d/.test(text);
+	    }
+	    textMatchesTransactionRow(date, amount, referenceNumber) {
+	        return /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d\d/.test(date) &&
+	            /\d+.\d+/.test(amount) &&
+	            /\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d/.test(referenceNumber);
 	    }
 	}
 	exports.default = StatementParser;
