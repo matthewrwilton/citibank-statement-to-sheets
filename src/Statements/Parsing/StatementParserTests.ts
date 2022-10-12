@@ -357,6 +357,46 @@ describe("StatementParser", () => {
 
 			expect(actual).toEqual(expected);
 		});
+
+		it("parses payment amounts", () => {
+			let input = transactionsHeader
+				.concat([
+					"Card Number 0000 0000 0000 0000",
+					"May 01",
+					"ABCDEFG",
+					"12.34",
+					"11111111111111111111111"
+				])
+				.concat([
+					"Card Number 0000 0000 0000 0001",
+					"May 01",
+					"Payment",
+					"-11.00",
+					"ABCD11111111111111"
+				])
+				.concat([
+					"Card Number 0000 0000 0000 0002",
+					"May 01",
+					"ABCDEFG",
+					"43.21",
+					"11111111111111111111111"
+				])
+				.concat([
+					"Page 5 of 5",
+					"A-1  B-1  C-1",
+					"ABCD/EFGH.IJK.LM.NOPQRS.TUVWXYZ1",
+				]);
+			let target = new StatementParser();
+
+			let expected = [
+				new StatementItem("0000 0000 0000 0000", "May 01", "ABCDEFG", "11111111111111111111111", "12.34", ""),
+				new StatementItem("0000 0000 0000 0001", "May 01", "Payment", "ABCD11111111111111", "-11.00", ""),
+				new StatementItem("0000 0000 0000 0002", "May 01", "ABCDEFG", "11111111111111111111111", "43.21", "")
+			];
+			let actual = target.parse(input);
+
+			expect(actual).toEqual(expected);
+		});
 	});
 });
 
