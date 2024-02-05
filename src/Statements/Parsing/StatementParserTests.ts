@@ -397,6 +397,41 @@ describe("StatementParser", () => {
 
 			expect(actual).toEqual(expected);
 		});
+
+		it("parses online Bpay payments", () => {
+			let input = transactionsHeader
+				.concat([
+					"Card Number 0000 0000 0000 0000",
+					"Jan 01",
+					"ABCDEFG",
+					"12.34",
+					"11111111111111111111111"
+				])
+				.concat([
+					"Jan 02",
+					"Online Bpay",
+					"56.78",
+					"ABCDE111111A111111"
+				])
+				.concat([
+					"Jan 03",
+					"ABCDEFG",
+					"43.21",
+					"11111111111111111111111"
+				])
+				.concat(pageEnding)
+				.concat(statementEnding);
+			let target = new StatementParser();
+
+			let expected = [
+				new StatementItem("0000 0000 0000 0000", "Jan 01", "ABCDEFG", "11111111111111111111111", "12.34", ""),
+				new StatementItem("0000 0000 0000 0000", "Jan 02", "Online Bpay", "ABCDE111111A111111", "56.78", ""),
+				new StatementItem("0000 0000 0000 0000", "Jan 03", "ABCDEFG", "11111111111111111111111", "43.21", "")
+			];
+			let actual = target.parse(input);
+
+			expect(actual).toEqual(expected);
+		});
 	});
 });
 
