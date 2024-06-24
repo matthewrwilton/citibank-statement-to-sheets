@@ -10,7 +10,7 @@ export default class Authoriser {
         gapi.auth.authorize(
             {
                 client_id: "572433782727-t18lsk18p4bgp272rjsadqtqdl06d37n.apps.googleusercontent.com",
-                scope: "https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/spreadsheets",
+                scope: "https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/spreadsheets",
                 immediate: false
             }, (result) => { this.authoriseCallback(result) }
         );
